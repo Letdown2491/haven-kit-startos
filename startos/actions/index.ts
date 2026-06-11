@@ -3,6 +3,7 @@ import { setup } from './setup'
 import { relayInfo } from './relayInfo'
 import { advanced } from './advanced'
 import { blastrRelays, importRelays } from './relayLists'
+import { cancelImport, importHistory } from './importHistory'
 
 export const actions = sdk.Actions.of()
   .addAction(setup)
@@ -10,3 +11,5 @@ export const actions = sdk.Actions.of()
   .addAction(advanced)
   .addAction(blastrRelays)
   .addAction(importRelays)
+  .addAction(importHistory)
+  .addAction(cancelImport)

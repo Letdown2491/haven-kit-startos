@@ -31,7 +31,16 @@ All settings live under **Actions**:
 
 Configuration changes restart the relay automatically.
 
+## Importing your existing notes
+
+To pull your historical notes into HAVEN:
+
+1. Add a few relays where your notes live via **Actions → Import Relays** (e.g. `wss://relay.damus.io`).
+2. Optionally set the **Import Start Date** in Advanced Settings — older notes are skipped.
+3. Run **Actions → Import History**. The relay restarts and stays offline while the import runs; follow progress in the service **Logs**. The relay comes back automatically when the import finishes (a **Cancel Import** action appears while one is pending).
+
+Haven also imports continuously in the background from the same relays while running.
+
 ## Notes
 
 - Backups via StartOS cover the database, media, and configuration. Haven's own S3 backup feature is disabled by default.
-- Importing your historical notes happens continuously from the configured import relays since the configured import start date.

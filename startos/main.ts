@@ -1,4 +1,5 @@
 import { havenEnv } from './fileModels/havenEnv'
+import { IMPORT_REQUESTED, importMarker } from './fileModels/importMarker'
 import { i18n } from './i18n'
 import { sdk } from './sdk'
 import { relayPort, npubPattern, requiredNpubKeys } from './utils'
@@ -9,9 +10,13 @@ export const main = sdk.setupMain(async ({ effects }) => {
    */
   console.info(i18n('Starting HAVEN'))
 
-  // Reading the config with .const() re-runs main (restarting the relay)
-  // whenever an action writes the file - haven only reads .env at startup.
+  // Reading these with .const() re-runs main (restarting the relay) whenever
+  // an action writes them - haven only reads .env at startup, and the import
+  // marker decides whether a one-shot import runs before the relay.
   const env = await havenEnv.read().const(effects)
+  const importRequested =
+    ((await importMarker.read().const(effects)) ?? '').trim() ===
+    IMPORT_REQUESTED
 
   /**
    * ======================== Daemons ========================
@@ -51,7 +56,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
     npubPattern.test(env?.[key] ?? ''),
   )
 
-  return sdk.Daemons.of(effects).addDaemon('primary', {
+  const primary = {
     subcontainer,
     exec: { command: sdk.useEntrypoint() },
     ready: {
@@ -63,12 +68,30 @@ export const main = sdk.setupMain(async ({ effects }) => {
               errorMessage: i18n('The relay is not ready'),
             })
           : {
-              result: 'starting',
+              result: 'starting' as const,
               message: i18n(
                 'Awaiting configuration - run Actions > Setup to enter your npub',
               ),
             },
     },
+  }
+
+  // When an import is requested (and the relay is configured - haven panics
+  // otherwise), run haven --import as a oneshot first; the relay daemon
+  // starts as soon as it completes. import.sh removes the marker when done,
+  // so the import never re-runs unless requested again.
+  if (configured && importRequested) {
+    return sdk.Daemons.of(effects)
+      .addOneshot('import', {
+        subcontainer,
+        exec: { command: ['/entrypoint.sh', '/import.sh'] },
+        requires: [],
+      })
+      .addDaemon('primary', { ...primary, requires: ['import'] })
+  }
+
+  return sdk.Daemons.of(effects).addDaemon('primary', {
+    ...primary,
     requires: [],
   })
 })

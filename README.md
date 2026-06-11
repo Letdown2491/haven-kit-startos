@@ -24,9 +24,10 @@ make install    # sideload to the server configured in ~/.startos/config.yaml
 - `startos/` is the package logic (TypeScript, `@start9labs/start-sdk`): actions write the config files, and `main.ts` reads the `.env` file model with `.const()` so any config change restarts the relay automatically.
 - Haven's `RELAY_URL` must be a **bare hostname** (no `ws://`/`wss://` scheme) — haven prepends schemes itself, and a scheme'd value yields malformed Blossom media URLs. The Setup action normalizes input and `entrypoint.sh` strips schemes defensively on every start.
 
+- The **Import History** action replaces the kit's interactive bulk-import flow: it writes a marker file that `main.ts` reads with `.const()`, restarting the service into a oneshot that runs `haven --import` (`import.sh` watches for the importer's completion phrases and SIGINTs it, since the binary never exits on its own) before the relay daemon starts. Progress streams to the regular service logs.
+
 ## Not yet implemented
 
-- **One-shot history import** (`haven --import`) — haven imports continuously from the configured import relays, but the kit's interactive bulk-import flow has no StartOS equivalent yet.
 - **Translations** — the i18n plumbing is in place (`startos/i18n/`), but only English strings are provided; other languages fall back to English.
 
 ## Updating the upstream version

@@ -31,7 +31,10 @@ COPY --from=builder /build/templates /haven/templates
 # and refuses to launch haven until the npub settings are real (haven panics
 # on a missing/invalid npub, which would otherwise crash-loop fresh installs).
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# One-shot history import wrapper, run before the relay when requested via
+# the Import History action (see startos/main.ts).
+COPY import.sh /import.sh
+RUN chmod +x /entrypoint.sh /import.sh
 
 RUN mkdir -p /haven/blossom /haven/db
 

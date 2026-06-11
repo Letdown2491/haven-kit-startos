@@ -70,6 +70,21 @@ const dict = {
   'Relays haven pulls your existing notes from when importing your history': 55,
   'Manage the list of public relays your outbox notes are broadcast to': 56,
   'Manage the list of seed relays used when importing your existing notes': 57,
+
+  // actions/importHistory.ts
+  'Import History': 58,
+  'Pull your existing notes from the configured import relays into your outbox and inbox. Progress is shown in the service logs.': 59,
+  'The relay restarts and stays offline while the import runs. This can take several minutes.': 60,
+  'Not configured': 61,
+  'Run the Setup action first - the import needs your npub.': 62,
+  'No import relays': 63,
+  'Add at least one relay with the Import Relays action first, so haven knows where to pull your notes from.': 64,
+  'Import scheduled': 65,
+  'The relay is restarting to run the import. Follow progress in the service logs; the relay comes back automatically when the import finishes.': 66,
+  'Cancel Import': 67,
+  'Cancel the pending or running history import and start the relay normally': 68,
+  'Import cancelled': 69,
+  'The relay is restarting normally.': 70,
 } as const
 
 /**

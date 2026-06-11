@@ -31,4 +31,4 @@ make install       # sideload to server in ~/.startos/config.yaml
 - `RELAY_URL` must be a **bare hostname** (no scheme) — haven prepends `wss://`/`https://` itself; a scheme'd value breaks Blossom media URLs. `normalizeRelayHost` in `startos/utils.ts` and `entrypoint.sh` both enforce this.
 - The SDK bundles zod v4: `z.record` takes two args.
 - Versioning is `<upstream haven version>:<package revision>` (`startos/versions/`), **not** the haven-kit version. See UPDATING.md for the bump procedure (the old current.ts must be kept as a graph node).
-- The kit's one-shot history import (`haven --import`) is not implemented here yet.
+- **History import**: the Import History action writes `config/import-requested`; `main.ts` (`.const()` read) restarts into an `import` oneshot (`/entrypoint.sh /import.sh`) that the `primary` daemon `requires`. `import.sh` watches stdout for haven's completion phrases ("tagged import complete" / "please restart the relay" — the binary never exits on its own), SIGINTs it, and **always deletes the marker**, so a failed import can't loop. Cancel Import overwrites the marker, which restarts the service into normal mode.
