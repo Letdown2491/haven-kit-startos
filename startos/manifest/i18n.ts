@@ -6,6 +6,19 @@ export const short = {
   fr_FR: 'Coffre à haute disponibilité pour les événements Nostr',
 }
 
+export const depTor = {
+  en_US:
+    'Optional. Provides a Tor (.onion) address so your relay is reachable without a public domain or open ports.',
+  es_ES:
+    'Opcional. Proporciona una dirección Tor (.onion) para que tu relay sea accesible sin un dominio público ni puertos abiertos.',
+  de_DE:
+    'Optional. Stellt eine Tor-Adresse (.onion) bereit, damit dein Relay ohne öffentliche Domain oder offene Ports erreichbar ist.',
+  pl_PL:
+    'Opcjonalne. Zapewnia adres Tor (.onion), dzięki któremu Twój relay jest osiągalny bez publicznej domeny i otwartych portów.',
+  fr_FR:
+    'Optionnel. Fournit une adresse Tor (.onion) pour que votre relais soit accessible sans domaine public ni ports ouverts.',
+}
+
 export const long = {
   en_US:
     'HAVEN is a sovereign personal Nostr relay: four relays in one (private, chat, inbox, outbox) plus a built-in Blossom media server. Your private relay stores drafts and personal notes for your eyes only, the chat relay handles your DMs with web-of-trust filtering, the outbox publishes and archives your public notes, and the inbox collects notes from others that tag you.',

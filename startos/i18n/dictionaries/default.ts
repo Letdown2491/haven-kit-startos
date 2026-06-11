@@ -23,7 +23,7 @@ const dict = {
   'Your Nostr public key (npub format). Only the owner can write to the private and outbox relays.': 14,
   'Must be a valid npub: "npub1" followed by 58 bech32 characters': 15,
   'Relay Address': 16,
-  'The public address clients use to reach your relay. Haven adds wss:// and https:// itself, so this is a bare hostname. Pick one of your StartOS addresses (the Tor address works without any extra setup) or enter a custom domain.': 17,
+  'The public address clients use to reach your relay. Haven adds the scheme itself, so this is a bare hostname. Pick one of your StartOS addresses or enter a custom domain. For a Tor (.onion) address, install the Tor service, add a Tor address to the relay interface, then re-open this action.': 17,
   'Choose a StartOS address': 18,
   Address: 19,
   'Custom domain': 20,

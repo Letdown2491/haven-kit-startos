@@ -12,8 +12,18 @@ HAVEN (High Availability Vault for Events on Nostr) is four personal Nostr relay
 1. After installing, the relay idles with the message "Awaiting configuration".
 2. Go to **Actions → Setup** and enter:
    - **Owner npub** — your Nostr public key (get it from your Nostr client)
-   - **Relay Address** — the public address clients use to reach the relay. The Tor (.onion) address works out of the box; a custom domain works too if you have one routed to the relay interface.
+   - **Relay Address** — the public address clients use to reach the relay: one of your StartOS addresses (a Tor address if you have the Tor service set up — see below), or a custom domain routed to the relay interface.
 3. Save. The relay starts automatically within a few seconds.
+
+## Tor (optional)
+
+To reach your relay over Tor:
+
+1. Install the **Tor** service from the registry (it is listed as an optional dependency of HAVEN).
+2. On HAVEN's **Outbox Relay** interface, add a Tor (.onion) address.
+3. Re-run **Actions → Setup** and pick the .onion address as the Relay Address.
+
+While your Relay Address is an onion, HAVEN reports Tor as a running dependency, so you'll be warned if Tor stops. Note that Tor only affects how clients reach your relay — haven's own outbound connections (blastr, import, inbox pull) go over clearnet regardless.
 
 ## Connecting clients
 

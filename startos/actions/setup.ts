@@ -49,7 +49,7 @@ export const inputSpec = InputSpec.of({
     return {
       name: i18n('Relay Address'),
       description: i18n(
-        'The public address clients use to reach your relay. Haven adds wss:// and https:// itself, so this is a bare hostname. Pick one of your StartOS addresses (the Tor address works without any extra setup) or enter a custom domain.',
+        'The public address clients use to reach your relay. Haven adds the scheme itself, so this is a bare hostname. Pick one of your StartOS addresses or enter a custom domain. For a Tor (.onion) address, install the Tor service, add a Tor address to the relay interface, then re-open this action.',
       ),
       default: 'select',
       disabled: false,

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-StartOS (0.4.x) package for the upstream [HAVEN](https://github.com/barrydeen/haven) Nostr relay — a sibling of [haven-kit](https://github.com/Letdown2491/haven-kit) (Docker/Podman + Umbrel). Unlike haven-kit there is **no web config UI**: StartOS has no host docker socket, so configuration is done natively through StartOS actions (`startos/actions/`) that write haven's config files, and StartOS itself handles Tor, interfaces, restarts, and backups.
+StartOS (0.4.x) package for the upstream [HAVEN](https://github.com/barrydeen/haven) Nostr relay — a sibling of [haven-kit](https://github.com/Letdown2491/haven-kit) (Docker/Podman + Umbrel). Unlike haven-kit there is **no web config UI**: StartOS has no host docker socket, so configuration is done natively through StartOS actions (`startos/actions/`) that write haven's config files, and StartOS itself handles interfaces, restarts, and backups.
 
 ## Commands
 
@@ -24,6 +24,7 @@ make install       # sideload to server in ~/.startos/config.yaml
 - **Config flow**: `startos/fileModels/havenEnv.ts` models the `.env` (flat string map, values double-quoted on write for godotenv). `init/seedFiles.ts` seeds wizard-equivalent defaults with empty npubs, fill-missing-only. Actions merge keys into it. `main.ts` reads the model with `.const(effects)`, so **any action write restarts the relay automatically** — that is the StartOS replacement for haven-kit's "restart relay" button.
 - **Setup action** (`actions/setup.ts`) sets `OWNER_NPUB` and copies it into all four per-relay npubs (like the haven-kit wizard), plus `RELAY_URL` chosen from the relay interface's public addresses (onion default) or a custom domain.
 - **Interfaces** (`startos/interfaces.ts`): one `ws` origin on port 3355, four exported interfaces for the path-based relays (`/`, `/private`, `/chat`, `/inbox`). Blossom media is HTTP on the same port.
+- **Tor**: on StartOS 0.4 Tor is a separate service (`tor`, a `url-v0` plugin), declared as an **optional** manifest dependency. Users add a .onion address to the relay interface via the StartOS UI; `dependencies.ts` declares a `running` dependency on `tor` only while `RELAY_URL` is an onion. Upstream haven has no outbound SOCKS support — Tor is inbound-only here (haven just switches to `ws://`/`http://` schemes for .onion RELAY_URLs).
 - **i18n**: every user-facing string must be wrapped in `i18n()` and listed in `startos/i18n/dictionaries/default.ts`; translations.ts is empty (English fallback).
 
 ## Gotchas
