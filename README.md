@@ -4,6 +4,10 @@
 
 This package builds the upstream haven binary from source at the ref pinned in `Dockerfile` (`HAVEN_VERSION`) and configures it natively through StartOS actions — no separate web UI. It is a sibling of [haven-kit](https://github.com/Letdown2491/haven-kit), which packages HAVEN for Docker/Podman and Umbrel.
 
+## Requirements
+
+**StartOS 0.4.0 or later.** This package uses the 0.4 TypeScript SDK and the new s9pk v2 format, which StartOS 0.3.x cannot read. Sideloading it on 0.3.x fails with an "invalid package" error. There is no 0.3.x build of this package; if you're on the 0.3.5 stable channel, you'll need to [upgrade to StartOS 0.4](https://github.com/Start9Labs/start-os/releases) first.
+
 ## Building
 
 Requires the [StartOS SDK environment](https://docs.start9.com/packaging/0.4.0.x/environment-setup.html) (`start-cli`, Docker, Node.js, Make).
