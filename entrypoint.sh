@@ -39,10 +39,41 @@ sync_config() {
 # npubs are required), so a fresh, unconfigured install would crash-loop. A
 # real npub is "npub1" plus 58 bech32 characters; anything else (empty, the
 # template placeholder, ...) means "not set up yet".
+BECH32_CHARSET="qpzry9x8gf2tvdw0s3jn54khce6mua7l"
+
+# Verify an npub's bech32 checksum (caller has already checked the format with
+# the regex below). Haven decodes the npub with nip19 and panics on a bad
+# checksum, so a well-formed but mistyped npub (e.g. hand-edited into the .env)
+# would crash-loop without this. Mirrors isValidNpub() in startos/utils.ts.
+npub_checksum_ok() {
+    data="${1#npub1}"
+    # hrp-expanded "npub" prefix + separator (constant), then each data value.
+    values="3 3 3 3 0 14 16 21 2"
+    while [ -n "$data" ]; do
+        ch="${data%"${data#?}"}"
+        data="${data#?}"
+        rest="${BECH32_CHARSET%%"$ch"*}"
+        [ "$rest" = "$BECH32_CHARSET" ] && return 1
+        values="$values ${#rest}"
+    done
+    chk=1
+    for v in $values; do
+        b=$(( chk >> 25 ))
+        chk=$(( ((chk & 0x1ffffff) << 5) ^ v ))
+        [ $(( b        & 1 )) -eq 1 ] && chk=$(( chk ^ 0x3b6a57b2 ))
+        [ $(( (b >> 1) & 1 )) -eq 1 ] && chk=$(( chk ^ 0x26508e6d ))
+        [ $(( (b >> 2) & 1 )) -eq 1 ] && chk=$(( chk ^ 0x1ea119fa ))
+        [ $(( (b >> 3) & 1 )) -eq 1 ] && chk=$(( chk ^ 0x3d4233dd ))
+        [ $(( (b >> 4) & 1 )) -eq 1 ] && chk=$(( chk ^ 0x2a1462b3 ))
+    done
+    [ "$chk" -eq 1 ]
+}
+
 is_configured() {
     for npub in "${OWNER_NPUB:-}" "${PRIVATE_RELAY_NPUB:-}" "${CHAT_RELAY_NPUB:-}" \
                 "${OUTBOX_RELAY_NPUB:-}" "${INBOX_RELAY_NPUB:-}"; do
         printf '%s' "$npub" | grep -Eq '^npub1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{58}$' || return 1
+        npub_checksum_ok "$npub" || return 1
     done
 }
 

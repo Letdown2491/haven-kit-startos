@@ -4,6 +4,51 @@ import { sdk } from '../sdk'
 
 const { InputSpec, Value } = sdk
 
+// Used only if the JS runtime lacks Intl.supportedValuesOf (it shouldn't on
+// StartOS's Node runtime) - a small, representative set so the dropdown is
+// never empty.
+const TIMEZONE_FALLBACK = [
+  'UTC',
+  'America/Anchorage',
+  'America/Los_Angeles',
+  'America/Denver',
+  'America/Chicago',
+  'America/New_York',
+  'America/Sao_Paulo',
+  'Europe/London',
+  'Europe/Paris',
+  'Europe/Berlin',
+  'Europe/Moscow',
+  'Africa/Johannesburg',
+  'Asia/Dubai',
+  'Asia/Kolkata',
+  'Asia/Shanghai',
+  'Asia/Tokyo',
+  'Australia/Sydney',
+  'Pacific/Auckland',
+]
+
+// All canonical IANA zone names, with UTC first so it can be the default.
+// Replacing the old free-text field stops invalid values (e.g. "MNT") that
+// silently fall back to UTC inside haven.
+function timezoneNames(): string[] {
+  let zones: string[] = []
+  try {
+    const supportedValuesOf = (
+      Intl as { supportedValuesOf?: (key: string) => string[] }
+    ).supportedValuesOf
+    if (supportedValuesOf) zones = supportedValuesOf('timeZone')
+  } catch {
+    zones = []
+  }
+  if (zones.length === 0) zones = TIMEZONE_FALLBACK
+  return ['UTC', ...zones.filter((zone) => zone !== 'UTC')]
+}
+
+const timezoneValues: Record<string, string> = Object.fromEntries(
+  timezoneNames().map((zone) => [zone, zone]),
+)
+
 export const inputSpec = InputSpec.of({
   dbEngine: Value.select({
     name: i18n('Database Engine'),
@@ -93,13 +138,11 @@ export const inputSpec = InputSpec.of({
     },
     default: 'INFO',
   }),
-  tz: Value.text({
+  tz: Value.select({
     name: i18n('Timezone'),
     description: i18n('IANA timezone name used for logs and backups'),
-    required: false,
-    default: null,
-    placeholder: 'UTC',
-    masked: false,
+    values: timezoneValues,
+    default: 'UTC',
   }),
 })
 
@@ -146,7 +189,7 @@ export const advanced = sdk.Action.withInput(
       )
         ? (env.HAVEN_LOG_LEVEL as 'DEBUG' | 'INFO' | 'WARN' | 'ERROR')
         : ('INFO' as const),
-      tz: env.TZ || undefined,
+      tz: env.TZ && env.TZ in timezoneValues ? env.TZ : 'UTC',
     }
   },
 
@@ -172,7 +215,7 @@ export const advanced = sdk.Action.withInput(
       )
     if (input.importStartDate !== null)
       updates.IMPORT_START_DATE = input.importStartDate
-    if (input.tz !== null && input.tz !== '') updates.TZ = input.tz
+    updates.TZ = input.tz
 
     await havenEnv.merge(effects, updates)
   },

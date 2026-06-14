@@ -85,6 +85,7 @@ const dict = {
   'Cancel the pending or running history import and start the relay normally': 68,
   'Import cancelled': 69,
   'The relay is restarting normally.': 70,
+  'That npub is not valid. Double-check for typos or missing characters - it should be the "npub1..." key copied exactly from your Nostr client.': 71,
 } as const
 
 /**

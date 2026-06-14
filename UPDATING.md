@@ -40,6 +40,10 @@ The current pin is the `ARG HAVEN_VERSION=` default in `Dockerfile`.
    `.env` settings, update `defaultEnv` in `startos/init/seedFiles.ts` and the
    relevant action in `startos/actions/`.
 
-4. **Verify**: `npm run check && make x86`, then sideload and confirm the
+4. **Record the release** in [CHANGELOG.md](CHANGELOG.md): add a section for
+   the new version (dated) whose wording matches the `current.ts` release
+   notes, and fold in anything sitting under `[Unreleased]`.
+
+5. **Verify**: `npm run check && make x86`, then sideload and confirm the
    relay starts, the Setup action round-trips, and a config change restarts
    the relay.

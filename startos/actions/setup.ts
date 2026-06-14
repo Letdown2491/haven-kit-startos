@@ -2,6 +2,7 @@ import { havenEnv } from '../fileModels/havenEnv'
 import { i18n } from '../i18n'
 import { sdk } from '../sdk'
 import {
+  isValidNpub,
   normalizeRelayHost,
   npubRegex,
   relayInterfaceId,
@@ -135,6 +136,17 @@ export const setup = sdk.Action.withInput(
 
   // the execution function
   async ({ effects, input }) => {
+    // The form's regex only checks the npub's shape; haven panics (crash-loop)
+    // on a checksum-invalid npub, so reject it here with a clear message before
+    // it ever reaches the relay.
+    if (!isValidNpub(input.ownerNpub)) {
+      throw new Error(
+        i18n(
+          'That npub is not valid. Double-check for typos or missing characters - it should be the "npub1..." key copied exactly from your Nostr client.',
+        ),
+      )
+    }
+
     const host = normalizeRelayHost(input.relayUrl.value.host || '')
 
     // Haven requires all four per-relay npubs as well; like the haven-kit
