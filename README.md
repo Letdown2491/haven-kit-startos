@@ -8,6 +8,15 @@ This package builds the upstream haven binary from source at the ref pinned in `
 
 **StartOS 0.4.0 or later.** This package uses the 0.4 TypeScript SDK and the new s9pk v2 format, which StartOS 0.3.x cannot read. Sideloading it on 0.3.x fails with an "invalid package" error. There is no 0.3.x build of this package; if you're on the 0.3.5 stable channel, you'll need to [upgrade to StartOS 0.4](https://github.com/Start9Labs/start-os/releases) first.
 
+## Installing
+
+Two options:
+
+- **Sideload our build.** Download the `.s9pk` for your architecture from this repo's [Releases](https://github.com/Letdown2491/haven-kit-startos/releases), then click **Sideload** in the StartOS top navigation bar and drag in (or select) the file.
+- **Third-party registry.** [sdbitcoiners](https://registry.sdbitcoiners.com/) hosts this package on their community StartOS registry. In the Marketplace, click **Switch** beneath the current registry title in the sidebar, add the registry URL, then install HAVEN from there. Note that third-party registries are community-run and host their own builds; this project doesn't control their availability or what they ship.
+
+Or build it yourself from source — see below.
+
 ## Building
 
 Requires the [StartOS SDK environment](https://docs.start9.com/packaging/0.4.0.x/environment-setup.html) (`start-cli`, Docker, Node.js, Make).
