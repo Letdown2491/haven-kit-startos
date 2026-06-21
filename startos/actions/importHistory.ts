@@ -54,11 +54,18 @@ export const importHistory = sdk.Action.withoutInput(
 
     await importMarker.write(effects, IMPORT_REQUESTED)
 
+    // main reads the marker with .const(), which is meant to restart the
+    // service automatically on write - but that depends on a filesystem watch
+    // that does not fire on all StartOS hosts when the marker file is *created*
+    // for the first time (unlike the always-seeded .env). Without a restart the
+    // import would silently never run, so trigger it explicitly here.
+    await effects.restart()
+
     return {
       version: '1' as const,
       title: i18n('Import scheduled'),
       message: i18n(
-        'The relay is restarting to run the import. Follow progress in the service logs; the relay comes back automatically when the import finishes.',
+        'The relay is restarting to run the import. While it runs the service status shows "Importing history"; it returns to Running on its own when the import finishes. Detailed progress is in the service logs.',
       ),
       result: null,
     }
@@ -87,6 +94,8 @@ export const cancelImport = sdk.Action.withoutInput(
   // the execution function
   async ({ effects }) => {
     await importMarker.write(effects, 'cancelled')
+    // Same reason as the import action: don't rely on the file watch to restart.
+    await effects.restart()
 
     return {
       version: '1' as const,

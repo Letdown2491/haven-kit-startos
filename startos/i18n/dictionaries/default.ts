@@ -80,12 +80,22 @@ const dict = {
   'No import relays': 63,
   'Add at least one relay with the Import Relays action first, so haven knows where to pull your notes from.': 64,
   'Import scheduled': 65,
-  'The relay is restarting to run the import. Follow progress in the service logs; the relay comes back automatically when the import finishes.': 66,
+  'The relay is restarting to run the import. While it runs the service status shows "Importing history"; it returns to Running on its own when the import finishes. Detailed progress is in the service logs.': 66,
   'Cancel Import': 67,
   'Cancel the pending or running history import and start the relay normally': 68,
   'Import cancelled': 69,
   'The relay is restarting normally.': 70,
   'That npub is not valid. Double-check for typos or missing characters - it should be the "npub1..." key copied exactly from your Nostr client.': 71,
+
+  // actions/npubLists.ts
+  'Access Control': 72,
+  'Whitelisted npubs': 73,
+  'Nostr public keys allowed to use the relay alongside you: they can read and write your private relay, post to your outbox relay, and be tagged on your inbox relay. Your owner npub is always allowed and does not need to be listed.': 74,
+  'Manage the additional npubs allowed to use the relay alongside you': 75,
+  'Blacklisted npubs': 76,
+  'Nostr public keys banned from posting to any of your relays. A blacklist entry overrides the whitelist and web of trust.': 77,
+  'Manage the npubs banned from posting to your relays': 78,
+  'One of the npubs is not valid. Double-check for typos or missing characters - each must be an "npub1..." key copied exactly from a Nostr client.': 79,
 } as const
 
 /**

@@ -4,18 +4,18 @@ import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 // relay URL prefix fix); the suffix after ":" is the package revision,
 // incremented for packaging-only changes (see UPDATING.md).
 export const current = VersionInfo.of({
-  version: '1.2.2:1',
+  version: '1.2.2:5',
   releaseNotes: {
     en_US:
-      'Reject invalid npubs during Setup and at startup, so a mistyped npub is caught with a clear message instead of crash-looping the relay.',
+      'Add Whitelisted npubs and Blacklisted npubs actions: let other people use your relay alongside you by whitelisting their npubs, or ban abusive keys with the blacklist. The relay restarts to apply the change.',
     es_ES:
-      'Rechaza npubs no válidos durante la configuración y al iniciar, de modo que un npub mal escrito se detecta con un mensaje claro en lugar de provocar un bucle de fallos del relé.',
+      'Añade las acciones «Npubs en lista blanca» y «Npubs en lista negra»: permite que otras personas usen tu relé junto a ti añadiendo sus npubs a la lista blanca, o veta claves abusivas con la lista negra. El relé se reinicia para aplicar el cambio.',
     de_DE:
-      'Lehnt ungültige npubs bei der Einrichtung und beim Start ab, sodass ein falsch eingegebener npub mit einer klaren Meldung erkannt wird, statt das Relay in einer Absturzschleife zu blockieren.',
+      'Fügt die Aktionen „Npubs auf der Whitelist“ und „Npubs auf der Blacklist“ hinzu: Lass andere Personen dein Relay mitnutzen, indem du ihre Npubs auf die Whitelist setzt, oder sperre missbräuchliche Schlüssel über die Blacklist. Das Relay startet neu, um die Änderung zu übernehmen.',
     pl_PL:
-      'Odrzuca nieprawidłowe npub-y podczas konfiguracji i przy starcie, dzięki czemu błędnie wpisany npub jest wychwytywany czytelnym komunikatem zamiast powodować pętlę awarii przekaźnika.',
+      'Dodaje akcje „Npuby na białej liście” i „Npuby na czarnej liście”: pozwól innym osobom korzystać z Twojego przekaźnika, dodając ich npuby do białej listy, lub zablokuj nadużywające klucze za pomocą czarnej listy. Przekaźnik restartuje się, aby zastosować zmianę.',
     fr_FR:
-      'Rejette les npubs invalides lors de la configuration et au démarrage, afin qu’un npub mal saisi soit détecté avec un message clair au lieu de faire planter le relais en boucle.',
+      'Ajoute les actions « Npubs en liste blanche » et « Npubs en liste noire » : laissez d’autres personnes utiliser votre relais à vos côtés en ajoutant leurs npubs à la liste blanche, ou bannissez les clés abusives avec la liste noire. Le relais redémarre pour appliquer le changement.',
   },
   migrations: {
     up: async ({ effects }) => {},

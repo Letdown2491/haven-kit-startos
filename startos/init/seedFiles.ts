@@ -1,4 +1,5 @@
 import { havenEnv } from '../fileModels/havenEnv'
+import { blacklistedNpubs, whitelistedNpubs } from '../fileModels/npubLists'
 import { relaysBlastr, relaysImport } from '../fileModels/relayLists'
 import { sdk } from '../sdk'
 
@@ -101,6 +102,11 @@ export const defaultEnv: Record<string, string> = {
   // Blastr
   BLASTR_RELAYS_FILE: '/haven-config/relays_blastr.json',
 
+  // Access control (JSON arrays of npubs; the owner is always whitelisted).
+  // Empty files keep the default owner-only behaviour.
+  WHITELISTED_NPUBS_FILE: '/haven-config/whitelisted_npubs.json',
+  BLACKLISTED_NPUBS_FILE: '/haven-config/blacklisted_npubs.json',
+
   // Web of trust
   WOT_FETCH_TIMEOUT_SECONDS: '60',
 
@@ -119,5 +125,11 @@ export const seedFiles = sdk.setupOnInit(async (effects) => {
   }
   if ((await relaysImport.read().once()) === null) {
     await relaysImport.write(effects, [])
+  }
+  if ((await whitelistedNpubs.read().once()) === null) {
+    await whitelistedNpubs.write(effects, [])
+  }
+  if ((await blacklistedNpubs.read().once()) === null) {
+    await blacklistedNpubs.write(effects, [])
   }
 })
